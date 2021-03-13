@@ -1,5 +1,7 @@
-if: [ ! -d "{{certbot.etc}}" ]
+if: [ -f "{{certbot.etc}}/.first-time" ]
+    le: rm "{{certbot.etc}}/.first-time"
     rt: certbot:configure -overwrite true
 fi:
+
 
 le: cron -f -L 8
