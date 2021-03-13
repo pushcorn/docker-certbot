@@ -1,0 +1,26 @@
+#? certbot.etc: /etc/letsencrypt
+
+#? certbot.hosts:   default
+#? certbot.email:   {{email}}
+#? certbot.domain:  {{domain}}
+
+#? certbot.plugins: cloudflare
+
+#[ certbot.plugins  cloudflare
+#? $$$.token:
+#? $$$.key:
+#? $$$.email:
+#]
+
+
+#[ certbot.hosts  default
+#? $$$.domain:    {{certbot.domain}}
+#? $$$.wildcard:  true
+#? $$$.plugins:   cloudflare
+
+#[ $$$.plugins    cloudflare
+#? $$$.token:     {{certbot.plugins.$$.token}}
+#? $$$.key:       {{certbot.plugins.$$.key}}
+#? $$$.email:     {{certbot.plugins.$$.email}}
+#]
+#]

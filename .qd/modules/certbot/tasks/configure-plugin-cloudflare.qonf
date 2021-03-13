@@ -1,0 +1,10 @@
+op: host string "The host name." true
+op: target string "The target directory for the generated configs." false {{certbot.etc}}
+
+se: cloudflare.etc hosts/{{host}}/cloudflare
+
+lq: render-template --source certbot:cloudflare/credentials.ini \
+    --output {{target}}/{{cloudflare.etc}}/ \
+    {{!cloudflare|env_to_data_args}}
+
+le: echo "--dns-cloudflare --dns-cloudflare-credentials {{certbot.etc}}/{{cloudflare.etc}}/credentials.ini" > {{target}}/{{cloudflare.etc}}/certonly.args

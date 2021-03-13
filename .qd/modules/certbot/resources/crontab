@@ -1,0 +1,1 @@
+0 */12 * * * root /usr/bin/perl -e 'sleep int(rand(43200))' && /usr/local/bin/certbot -q renew

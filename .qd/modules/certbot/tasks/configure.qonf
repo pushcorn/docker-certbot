@@ -1,0 +1,54 @@
+op: overwrite bool "Whether to overwrite the existing config files."
+
+le: mkdir -p "{{certbot.etc}}"
+se: certbot.tmp /tmp/certbot-{{|env (RANDOM)}}
+le: rm -rf /tmp/certbot-* && mkdir {{certbot.tmp}}
+le: cp -prf {{certbot.etc}}/. {{certbot.tmp}}
+le: cp $(qd_asset_path certbot:resources/crontab) /etc/cron.d/certbot
+
+#[ hooks pre deploy post
+lq: render-template --source certbot:hook \
+        --output {{certbot.etc}}/renewal-hooks/$$/run-$$-hooks \
+        --permission u+x \
+        --data.type $$
+#]
+
+#[ certbot.hosts
+    #[ $$$.plugins
+        rt: certbot:configure-plugin-$$ -host $$.. -target {{certbot.tmp}} {{!$$$ -$$.|env_to_args}}
+    #]
+#]
+
+hi:
+if: .true overwrite
+    se: .apply true
+el:
+    in: Checking configuration change...
+    if: qd_diff {{certbot.etc}}/hosts {{certbot.tmp}}/hosts
+        if: echo && qd_prompt "Do you want to update the configuration file(s)?" false
+            se: .apply true
+        fi:
+    el:
+        le: echo "Configuration not changed."
+    fi:
+fi:
+
+if: .true .apply
+    le: cp -prf {{certbot.tmp}}/. {{certbot.etc}}
+
+    #[ certbot.hosts
+        se: args --dry-run --agree-tos --no-eff-email --keep-until-expiring
+
+        #[ $$$.plugins
+            le: qd_set_option args "{{args}} $(< {{certbot.etc}}/hosts/$$../$$/certonly.args)"
+        #]
+
+        si:
+        le: certbot certonly {{args}} \
+                -d {{$$$.domain}} \
+                {{#? $$$.wildcard}}-d "*.{{$$$.domain}}"{{/}} \
+                {{#+ certbot.email}}-m "{{certbot.email}}"
+    #]
+fi:
+
+le: rm -rf {{certbot.tmp}}
