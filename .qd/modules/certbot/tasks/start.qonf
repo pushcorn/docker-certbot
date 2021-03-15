@@ -3,5 +3,8 @@ if: [ -f "{{certbot.etc}}/.first-time" ]
     rt: certbot:configure -overwrite true
 fi:
 
-
-le: cron -f -L 8
+if: ls {{certbot.etc}}/renewal/* &> /dev/null
+    le: cron -f -L 8
+el:
+    in: No certificates to renew.
+fi:

@@ -12,7 +12,6 @@
 #? $$$.email:
 #]
 
-
 #[ certbot.hosts  default
 #? $$$.domain:    {{certbot.domain}}
 #? $$$.wildcard:  true
