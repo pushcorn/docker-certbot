@@ -2,9 +2,6 @@ FROM pushcorn/ubuntu:latest
 
 LABEL maintainer="joseph@pushcorn.com"
 
-ARG BUILD_ID=NA
-ENV BUILD_ID=$BUILD_ID
-
 RUN qd ubuntu:begin-apt-install \
     && apt-get -y install \
         python3-pip \
