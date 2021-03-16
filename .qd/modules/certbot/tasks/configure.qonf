@@ -1,13 +1,15 @@
 op: overwrite bool "Whether to overwrite the existing config files."
 
-se: certbot.tmp "/tmp/certbot-$RANDOM"
-le: mkdir {{certbot.tmp}}
+
+se: certbot.tmp $(qd_mktemp_dir)
 le: cp -prf {{certbot.etc}}/. {{certbot.tmp}}
+se: .old.files "$(ls {{certbot.tmp}})"
+
 le: cp $(qd_asset_path certbot:resources/crontab) /etc/cron.d/certbot
 
 #[ hooks pre deploy post
 lq: render --source certbot:hook \
-        --target {{certbot.etc}}/renewal-hooks/$$/run-$$-hooks \
+        --target {{certbot.tmp}}/renewal-hooks/$$/run-$$-hooks \
         --permission u+x \
         --data.type $$
 #]
@@ -19,20 +21,15 @@ lq: render --source certbot:hook \
 #]
 
 hi:
-if: .true overwrite
-    so: .apply true
-el:
-    in: Checking configuration change...
-    if: qd_diff {{certbot.etc}}/hosts {{certbot.tmp}}/hosts
-        if: echo && qd_prompt "Do you want to update the configuration file(s)?" false
-            so: .apply true
-        fi:
-    el:
-        le: echo "Configuration not changed."
+
+
+if: [ -n "{{.old.files}}" ] && qd_diff {{certbot.etc}}/hosts {{certbot.tmp}}/hosts
+    if: ! {{overwrite}} && echo && qd_prompt "Do you want to update the configuration files?"
+        so: overwrite true
     fi:
 fi:
 
-if: .true .apply
+if: {{overwrite}}
     le: cp -prf {{certbot.tmp}}/. {{certbot.etc}}
 
     #[ certbot.hosts
@@ -55,5 +52,4 @@ if: .true .apply
     #]
 fi:
 
-hi:
-le: rm -rf {{certbot.tmp}}
+le: rm -rf $QD_TMP_DIR/*
