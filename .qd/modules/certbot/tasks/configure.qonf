@@ -31,25 +31,25 @@ fi:
 
 if: {{overwrite}}
     le: cp -prf {{certbot.tmp}}/. {{certbot.etc}}
-
-    #[ certbot.hosts
-        hi:
-        if: [ -z "{{$$$.domain}}" ] || [ "{{$$$.domain}}" = "local" ]
-            er: The domain for host '$$' is empty or is equal to 'local'.
-        el:
-            so: args --agree-tos --no-eff-email --keep-until-expiring
-
-            #[ $$$.plugins
-                se: args "{{args}} $(< {{certbot.etc}}/hosts/$$../$$/certonly.args)"
-            #]
-
-            si:
-            le: certbot certonly {{args}} \
-                    -d "{{$$$.domain}}" \
-                    {{#? $$$.wildcard}}-d "*.{{$$$.domain}}"{{/}} \
-                    {{#+ certbot.email}}-m "{{certbot.email}}"
-        fi:
-    #]
 fi:
+
+#[ certbot.hosts
+    hi:
+    if: [ -z "{{$$$.domain}}" ] || [ "{{$$$.domain}}" = "local" ]
+        er: The domain for host '$$' is empty or is equal to 'local'.
+    el:
+        so: args --agree-tos --no-eff-email --keep-until-expiring
+
+        #[ $$$.plugins
+            se: args "{{args}} $(< {{certbot.etc}}/hosts/$$../$$/certonly.args)"
+        #]
+
+        si:
+        le: certbot certonly {{args}} \
+                -d "{{$$$.domain}}" \
+                {{#? $$$.wildcard}}-d "*.{{$$$.domain}}"{{/}} \
+                {{#+ certbot.email}}-m "{{certbot.email}}" || true
+    fi:
+#]
 
 le: rm -rf $QD_TMP_DIR/*

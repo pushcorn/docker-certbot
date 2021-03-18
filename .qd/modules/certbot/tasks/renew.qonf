@@ -1,0 +1,8 @@
+op: wait bool "Wait for a random amount of time before renewing." false
+
+if: {{wait}}
+    se: delay $(( (RANDOM % (60 * 60 * 12)) + 1 ))
+    le: sleep {{delay}}
+fi:
+
+le: certbot renew

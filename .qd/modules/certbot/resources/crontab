@@ -1,1 +1,5 @@
-0 */12 * * * root /usr/bin/perl -e 'sleep int(rand(43200))' && /usr/local/bin/certbot -q renew
+SHELL=/bin/bash
+BASH_ENV=/etc/environment
+MAILTO=''
+
+0 */12 * * * root qt certbot:renew -wait true &> /proc/1/fd/1
