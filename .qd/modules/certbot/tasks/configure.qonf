@@ -1,9 +1,9 @@
 op: overwrite bool "Whether to overwrite the existing config files."
 
 
-se: certbot.tmp $(qd_mktemp_dir)
+se: certbot.tmp qd_mktemp_dir
 le: cp -prf {{certbot.etc}}/. {{certbot.tmp}}
-se: .old.files "$(ls {{certbot.tmp}})"
+se: .old.files ls {{certbot.tmp}}
 
 le: cp $(qd_asset_path certbot:resources/crontab) /etc/cron.d/certbot
 
@@ -41,7 +41,7 @@ fi:
         so: args --agree-tos --no-eff-email --keep-until-expiring
 
         #[ $$$.plugins
-            se: args "{{args}} $(< {{certbot.etc}}/hosts/$$../$$/certonly.args)"
+            sv: args "{{args}} $(< {{certbot.etc}}/hosts/$$../$$/certonly.args)"
         #]
 
         si:
@@ -51,5 +51,3 @@ fi:
                 {{#+ certbot.email}}-m "{{certbot.email}}" || true
     fi:
 #]
-
-le: rm -rf $QD_TMP_DIR/*

@@ -17,4 +17,4 @@ RUN qd ubuntu:begin-apt-install \
     && mkdir -p /etc/letsencrypt \
     && qd :install --command openssl:view-cert
 
-CMD [":run-task", "--task", "init,certbot:start"]
+CMD [":run-task", "--task", "start,certbot:start"]

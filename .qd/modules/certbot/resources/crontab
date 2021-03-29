@@ -2,4 +2,4 @@ SHELL=/bin/bash
 BASH_ENV=/etc/environment
 MAILTO=''
 
-0 */12 * * * root qt certbot:renew -wait true &> /proc/1/fd/1
+0 */12 * * * root qd certbot:renew -wait true &> /proc/1/fd/1
