@@ -3,7 +3,7 @@ op: target string "The target directory for the generated configs." false {{cert
 
 so: cloudflare.etc hosts/{{host}}/cloudflare
 
-lq: render --source certbot:cloudflare/credentials.ini \
+lq: :render --source certbot:cloudflare/credentials.ini \
     --target {{target}}/{{cloudflare.etc}}/ \
     {{!cloudflare|env_to_data_args}}
 

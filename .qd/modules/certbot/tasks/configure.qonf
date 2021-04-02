@@ -8,7 +8,7 @@ se: .old.files ls {{certbot.tmp}}
 le: cp $(qd_asset_path certbot:resources/crontab) /etc/cron.d/certbot
 
 #[ hooks pre deploy post
-lq: render --source certbot:hook \
+lq: :render --source certbot:hook \
         --target {{certbot.tmp}}/renewal-hooks/$$/run-$$-hooks \
         --permission u+x \
         --data.type $$
