@@ -6,8 +6,8 @@ RUN qd ubuntu:begin-apt-install \
     && apt-get -y install \
         python3-pip \
     && pip3 install \
-        "certbot==1.13.0" \
-        "certbot-dns-cloudflare==1.13.0" \
+        "certbot==1.14.0" \
+        "certbot-dns-cloudflare==1.14.0" \
     && apt-get -y remove python3-pip \
     && apt-get -y install \
         python3 \
