@@ -1,5 +1,7 @@
 #!/bin/bash
 
 /root/.qd/bin/qt certbot:run-{{type}}-hooks \
+    --optional true \
     -domains "$RENEWED_DOMAINS" \
     -lineage "$RENEWED_LINEAGE"
+

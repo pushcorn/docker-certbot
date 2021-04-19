@@ -1,7 +1,7 @@
-op: wait bool "Wait for a random amount of time before renewing." false
+op: wait bool "Wait for a random amount of time before renewing."
 
 if: {{wait}}
-    se: delay $(( (RANDOM % (60 * 60 * 12)) + 1 ))
+    sv: delay $(( (RANDOM % (60 * 60 * 12)) + 1 ))
     le: sleep {{delay}}
 fi:
 
