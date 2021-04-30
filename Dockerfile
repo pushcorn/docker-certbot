@@ -15,6 +15,6 @@ RUN qd ubuntu:begin-apt-install \
         python3-setuptools \
     && qd ubuntu:end-apt-install \
     && mkdir -p /etc/letsencrypt \
-    && qd :install --command openssl:view-cert
+    && qd :install --command openssl:view-cert --prefix /usr/local
 
 CMD [":run-task", "--task", "start,certbot:start"]
